@@ -1,0 +1,4 @@
+to host the website, you would need to have the live server extension downloaded from vscode and then in the bottom right, there is a button that says "go live" once you click that on any of the html pages, the website should be up.
+
+to make sure flask is running you would need to run the phishingurls.py file. you would need to make sure you have all the libraries installed before hand to make sure the code runs.
+

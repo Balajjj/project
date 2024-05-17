@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<link href="css/ssphishingscan.css" rel="stylesheet /">
+
+    <link rel="stylesheet"
+    href="https://unpkg.com/boxicons@latest/css/boxicons.min.css">
+
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=MuseoModerno:itol,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
+    
+
+    <title>Phishing URL Scanner</title>
+
+</head>
+<body>
+
+    <header>
+        <a href="#"class="logo"><i class='bx bxs-virus-block'></i>CatchYourPhish</a>
+    
+       
+        <ul class="navlist">
+        <li><a href="index.html">Home</a></1i>
+        <li><a href="about.html">About</a></li>
+        <li><a href="contactme.html">Contact Me</a></a></li>
+
+        </ul>
+   
+        
+       <div class="h-main">
+        <a href="#" class="h-btn">Scan Now!</a>
+        <div class="bx bx-menu" id="menuicon"></div>
+        <div class="bx bx-moon" id="darkmode"></div>
+
+        </div>
+    </header>
+
+    <div class="down-arrow">
+        <i class='bx bx-down-arrow-alt' ></i>
+    
+    </div>
+    
+
+    <div class="container">
+        <h1>Scanner</h1>
+        <p>Paste URLs to scan:</p>
+        <textarea id="urlInput" placeholder="Paste URLs here..." required></textarea>
+        <button onclick="scanURLs()">Scan</button>
+        <div id="predictions"></div>
+    </div>
+
+    <script>
+        function scanURLs() {
+            const urlInput = document.getElementById('urlInput');
+            const predictionsDiv = document.getElementById('predictions');
+            const urls = urlInput.value.split('\n').filter(url => url.trim() !== '');
+            const data = { urls };
+
+            fetch('http://localhost:5000/predict', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(data)
+            })
+            .then(response => response.json())
+            .then(data => {
+
+
+                predictionsDiv.innerHTML = '<h2>Predictions:</h2>';
+                data.predictions.forEach((prediction, index) => {
+                    const url = urls[index];
+                    const result = prediction === 0 ? 'Phishing' : 'Safe to use!';
+                    const color = prediction === 0 ? 'red' : 'green';
+                    const predictionElement = document.createElement('p');
+                    predictionElement.style.color = color;
+                    predictionElement.textContent = `${url}: ${result}`;
+                    predictionsDiv.appendChild(predictionElement);
+                });
+            })
+
+
+            
+            .catch(error => {
+                console.error('Error:', error);
+                predictionsDiv.innerHTML = '<p>Error occurred. Please try again.</p>';
+            });
+        }
+    </script>
+    
+    <div id="result"></div>
+
+    <script src="js/script.js"></script>
+
+    <script src="https://unpkg.com/scrollreveal"></script>
+    
+  
+    <script src="js/script.js"></script>
+
+        
+        </body>
+        </html>
